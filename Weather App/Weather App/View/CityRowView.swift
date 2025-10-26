@@ -39,10 +39,13 @@ struct CityRowView: View {
             }
             .buttonStyle(.plain)
             .padding(.leading, 8)
-            Image(systemName: "chevron.right")
-                .foregroundColor(.secondary)
         }
         .padding(.vertical, 8)
+        .contentShape(Rectangle())
+        .onTapGesture(perform: onSelect)
+        .background(
+            Color.blue.opacity(0.02)
+        )
     }
 }
 

@@ -35,28 +35,3 @@ final class WeatherService: WeatherServiceProtocol {
             }
     }
 }
-
-// MARK: - MockWeatherService (for previews/testing)
-#if DEBUG
-final class MockWeatherService: WeatherServiceProtocol {
-    func fetchWeather(for city: String, completion: @escaping (Result<CityCurrentWeather, Error>) -> Void) {
-        let mock = CityCurrentWeather(
-            coord: Coord(lon: 0, lat: 0),
-            weather: [Weather(id: 1, main: "Clear", description: "clear sky", icon: "01d")],
-            base: nil,
-            main: Main(temp: 293.15, feelsLike: 293.15, tempMin: 291.15, tempMax: 295.15,
-                       pressure: 1012, humidity: 60, seaLevel: nil, grndLevel: nil),
-            visibility: nil,
-            wind: Wind(speed: 3.4, deg: 270),
-            clouds: Clouds(all: 0),
-            dt: Int(Date().timeIntervalSince1970),
-            sys: Sys(type: nil, id: nil, country: "GB", sunrise: nil, sunset: nil),
-            timezone: nil,
-            id: 1234,
-            name: "London",
-            cod: 200
-        )
-        completion(.success(mock))
-    }
-}
-#endif

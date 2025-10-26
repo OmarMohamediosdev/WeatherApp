@@ -5,9 +5,8 @@
 //  Created by Omar Mohamed on 26/10/2025.
 //
 
-import Foundation
-import Combine
 import SwiftUI
+import Combine
 
 @MainActor
 final class CityListViewModel: ObservableObject {

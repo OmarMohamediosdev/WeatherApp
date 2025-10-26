@@ -24,6 +24,7 @@ final class WeatherDetailViewModel: ObservableObject {
     func loadWeather() {
         isLoading = true
         errorMessage = nil
+        weather = nil
         
         service.fetchWeather(for: cityName) { [weak self] result in
             guard let self = self else { return }
