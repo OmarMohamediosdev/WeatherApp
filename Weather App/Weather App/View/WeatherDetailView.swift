@@ -47,6 +47,19 @@ struct WeatherDetailView: View {
                                 .font(.largeTitle)
                                 .bold()
                             
+                            // add weather icon
+                            if let mainCondition = weather.weather?.first?.main {
+                                let symbol = symbolName(for: mainCondition)
+                                let colors = symbolColors(for: mainCondition) // 🔥 new color helper below
+                                
+                                Image(systemName: symbol)
+                                    .font(.system(size: 80))
+                                    .symbolRenderingMode(.palette)
+                                    .foregroundStyle(colors.primary, colors.secondary)
+                                    .padding(.top, 8)
+                                    .shadow(color: colors.primary.opacity(0.4), radius: 6, x: 0, y: 2)
+                            }
+                            
                             if let kelvin = weather.main?.temp {
                                 Text(String(format: "%.1f ℃", kelvin - 273.15))
                                     .font(.system(size: 48, weight: .semibold))
@@ -99,6 +112,49 @@ struct WeatherDetailView: View {
             .onAppear {
                 viewModel.loadWeather()
             }
+        }
+    }
+    
+    // helper function to map weather conditions → SF Symbols
+    private func symbolName(for condition: String) -> String {
+        switch condition.lowercased() {
+        case "clear":
+            return "sun.max.fill"
+        case "clouds":
+            return "cloud.fill"
+        case "rain":
+            return "cloud.rain.fill"
+        case "drizzle":
+            return "cloud.drizzle.fill"
+        case "thunderstorm":
+            return "cloud.bolt.rain.fill"
+        case "snow":
+            return "snowflake"
+        case "mist", "fog", "haze", "smoke":
+            return "cloud.fog.fill"
+        default:
+            return "questionmark.circle"
+        }
+    }
+    
+    private func symbolColors(for condition: String) -> (primary: Color, secondary: Color) {
+        switch condition.lowercased() {
+        case "clear":
+            return (.yellow, .orange)
+        case "clouds":
+            return (.gray, .white)
+        case "rain":
+            return (.blue, .cyan)
+        case "drizzle":
+            return (.mint, .teal)
+        case "thunderstorm":
+            return (.purple, .indigo)
+        case "snow":
+            return (.white, .blue)
+        case "mist", "fog", "haze", "smoke":
+            return (.gray, .blue.opacity(0.5))
+        default:
+            return (.secondary, .gray)
         }
     }
 }
