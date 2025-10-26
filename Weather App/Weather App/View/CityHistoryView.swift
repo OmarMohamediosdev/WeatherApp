@@ -13,6 +13,7 @@ struct CityHistoryView: View {
     @FetchRequest var records: FetchedResults<WeatherInfo>
     @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel = CityHistoryViewModel(service: WeatherService())
+    @State private var selectedRecord: WeatherInfo?
     
     // FetchRequest with predicate
     init(cityName: String) {
@@ -65,6 +66,8 @@ struct CityHistoryView: View {
                             }
                         }
                         .padding(.vertical, 4)
+                        // tap opens detail sheet
+                        .onTapGesture { selectedRecord = record }
                     }
                 }
             }
@@ -73,6 +76,11 @@ struct CityHistoryView: View {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Done") { dismiss() }
                 }
+            }
+            // present detail view with historical data
+            .sheet(item: $selectedRecord) { record in
+                let historyVM = WeatherDetailViewModel(record: record, service: WeatherService())
+                WeatherDetailView(viewModel: historyVM)
             }
         }
     }

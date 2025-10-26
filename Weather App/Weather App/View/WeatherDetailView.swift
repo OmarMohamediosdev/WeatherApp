@@ -17,6 +17,10 @@ struct WeatherDetailView: View {
         )
     }
     
+    init(viewModel: WeatherDetailViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
+    
     var body: some View {
         NavigationView {
             Group {
@@ -107,7 +111,9 @@ struct WeatherDetailView: View {
                 }
             }
             .onAppear {
-                viewModel.loadWeather()
+                if !viewModel.isHistory && viewModel.weather == nil {
+                    viewModel.loadWeather()
+                }
             }
         }
     }

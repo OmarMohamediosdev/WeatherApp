@@ -12,6 +12,7 @@ import UIKit
 final class WeatherDetailViewModel: ObservableObject {
     private let service: WeatherServiceProtocol
     let cityName: String
+    let isHistory: Bool
     
     @Published var weather: CityCurrentWeather?
     @Published var weatherImage: UIImage?
@@ -21,9 +22,45 @@ final class WeatherDetailViewModel: ObservableObject {
     init(cityName: String, service: WeatherServiceProtocol) {
         self.cityName = cityName
         self.service = service
+        self.isHistory = false
+    }
+    
+    // initializer for offline record
+    init(record: WeatherInfo, service: WeatherServiceProtocol) {
+        self.cityName = record.cityName ?? ""
+        self.service = service
+        self.isHistory = true // important: prevent auto-refresh
+        
+        // 🔥 Build CityCurrentWeather from record (readonly snapshot)
+        self.weather = CityCurrentWeather(
+            coord: nil,
+            weather: [ Weather(id: nil,
+                               main: record.condition,
+                               description: record.condition,
+                               icon: record.iconCode) ],
+            base: nil,
+            main: Main(temp: record.temperature,
+                       feelsLike: nil, tempMin: nil, tempMax: nil,
+                       pressure: nil, humidity: nil, seaLevel: nil, grndLevel: nil),
+            visibility: nil,
+            wind: nil,
+            clouds: nil,
+            dt: Int(record.timestamp?.timeIntervalSince1970 ?? Date().timeIntervalSince1970),
+            sys: nil,
+            timezone: nil,
+            id: nil,
+            name: record.cityName,
+            cod: nil
+        )
+        
+        if let icon = record.iconCode {
+            fetchWeatherIcon(icon)
+        }
     }
     
     func loadWeather() {
+        guard !isHistory else { return }
+        
         isLoading = true
         errorMessage = nil
         weather = nil
