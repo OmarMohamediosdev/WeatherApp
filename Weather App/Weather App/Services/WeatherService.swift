@@ -11,6 +11,7 @@ import Alamofire
 // MARK: - WeatherServiceProtocol
 protocol WeatherServiceProtocol {
     func fetchWeather(for city: String, completion: @escaping (Result<CityCurrentWeather, Error>) -> Void)
+    func fetchWeatherIcon(for iconCode: String, completion: @escaping (Result<UIImage, Error>) -> Void)
 }
 
 final class WeatherService: WeatherServiceProtocol {
@@ -34,4 +35,22 @@ final class WeatherService: WeatherServiceProtocol {
                 }
             }
     }
+    
+    func fetchWeatherIcon(for iconCode: String, completion: @escaping (Result<UIImage, Error>) -> Void) {
+        let iconURL = "https://openweathermap.org/img/wn/\(iconCode)@2x.png"
+        
+        AF.request(iconURL).responseData { response in
+            switch response.result {
+            case .success(let data):
+                if let image = UIImage(data: data) {
+                    completion(.success(image))
+                } else {
+                    completion(.failure(NSError(domain: "InvalidImage", code: 0)))
+                }
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
 }
