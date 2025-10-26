@@ -46,12 +46,22 @@ struct CityListView: View {
                     }
                 }
             }
+            
+            // add city sheet
+            .sheet(isPresented: $showingAddCity) {
+                AddCityView { newCityName in
+                    viewModel.addCity(named: newCityName)
+                }
+            }
+            // details sheet
             .sheet(item: $selectedCityForDetail) { city in
                 WeatherDetailView(cityWeather: city)
             }
+            // loading the data
             .onAppear {
                 viewModel.loadAllCities()
             }
+            // alert
             .alert(isPresented: .constant(viewModel.errorMessage != nil)) {
                 Alert(
                     title: Text("Error"),

@@ -41,9 +41,25 @@ final class CityListViewModel: ObservableObject {
     func addCity(named name: String) {
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
-        guard !cityNames.contains(where: { $0.lowercased() == trimmed.lowercased() }) else { return }
-        cityNames.append(trimmed)
-        Task { await fetchWeather(for: trimmed) }
+        guard !cityNames.contains(where: { $0.lowercased() == trimmed.lowercased() }) else {
+            errorMessage = "\(trimmed) is already in your list."
+            return
+        }
+        
+        isLoading = true
+        service.fetchWeather(for: trimmed) { [weak self] result in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.isLoading = false
+                switch result {
+                case .success(let weather):
+                    self.cityNames.append(trimmed)
+                    self.cityWeathers.append(weather)
+                case .failure:
+                    self.errorMessage = "Couldn't find weather data for '\(trimmed)'. Please check the spelling."
+                }
+            }
+        }
     }
     
     func delete(at offsets: IndexSet) {
