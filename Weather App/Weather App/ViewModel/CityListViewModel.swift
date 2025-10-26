@@ -94,6 +94,7 @@ final class CityListViewModel: ObservableObject {
         record.temperature = weather.main?.temp ?? 0
         record.condition = weather.weather?.first?.description ?? "Unknown"
         record.timestamp = Date()
+        record.iconCode = weather.weather?.first?.icon ?? "01d"
         do {
             try context.save()
         } catch {

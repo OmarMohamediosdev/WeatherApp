@@ -21,6 +21,7 @@
 		9ABA63E02EAE416B00C5C2C7 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABA63DF2EAE416B00C5C2C7 /* PersistenceController.swift */; };
 		9ABA63E32EAE422600C5C2C7 /* WeatherModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9ABA63E12EAE422600C5C2C7 /* WeatherModel.xcdatamodeld */; };
 		9ABA63E52EAE434A00C5C2C7 /* CityHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABA63E42EAE434A00C5C2C7 /* CityHistoryView.swift */; };
+		9ABA63E72EAE549C00C5C2C7 /* CityHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ABA63E62EAE549C00C5C2C7 /* CityHistoryViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		9ABA63DF2EAE416B00C5C2C7 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		9ABA63E22EAE422600C5C2C7 /* WeatherModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = WeatherModel.xcdatamodel; sourceTree = "<group>"; };
 		9ABA63E42EAE434A00C5C2C7 /* CityHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityHistoryView.swift; sourceTree = "<group>"; };
+		9ABA63E62EAE549C00C5C2C7 /* CityHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityHistoryViewModel.swift; sourceTree = "<group>"; };
 		9E611D46AB9A5C50AD16FE2C /* Pods_Weather_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Weather_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -94,6 +96,7 @@
 			children = (
 				078ACCD82EAD849000569936 /* CityListViewModel.swift */,
 				078ACCDA2EAD854A00569936 /* WeatherDetailViewModel.swift */,
+				9ABA63E62EAE549C00C5C2C7 /* CityHistoryViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -278,6 +281,7 @@
 				0795A1CF2EACF46D009A1B69 /* Weather_AppApp.swift in Sources */,
 				0795A1E52EACF9CE009A1B69 /* CityCurrentWeather.swift in Sources */,
 				9ABA63D82EAE377400C5C2C7 /* AddCityView.swift in Sources */,
+				9ABA63E72EAE549C00C5C2C7 /* CityHistoryViewModel.swift in Sources */,
 				078ACCDB2EAD854A00569936 /* WeatherDetailViewModel.swift in Sources */,
 				9ABA63E02EAE416B00C5C2C7 /* PersistenceController.swift in Sources */,
 			);

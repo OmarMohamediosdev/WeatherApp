@@ -12,8 +12,9 @@ struct CityHistoryView: View {
     let cityName: String
     @FetchRequest var records: FetchedResults<WeatherInfo>
     @Environment(\.dismiss) private var dismiss
+    @StateObject private var viewModel = CityHistoryViewModel(service: WeatherService())
     
-    // 🔥 FetchRequest with predicate
+    // FetchRequest with predicate
     init(cityName: String) {
         self.cityName = cityName
         _records = FetchRequest<WeatherInfo>(
@@ -31,17 +32,36 @@ struct CityHistoryView: View {
                         .padding()
                 } else {
                     ForEach(records) { record in
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text((record.condition ?? "Unknown").capitalized)
-                                .font(.headline)
+                        HStack(spacing: 12) {
+                            // Load and show weather icon from OpenWeather
+                            if let icon = record.iconCode {
+                                if let image = viewModel.iconImages[icon] {
+                                    Image(uiImage: image)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 40, height: 40)
+                                        .cornerRadius(6)
+                                } else {
+                                    ProgressView()
+                                        .frame(width: 40, height: 40)
+                                        .onAppear {
+                                            viewModel.fetchIcon(for: icon)
+                                        }
+                                }
+                            }
                             
-                            Text(String(format: "%.1f ℃", record.temperature - 273.15))
-                                .font(.subheadline)
-                            
-                            if let date = record.timestamp {
-                                Text(date.formatted(date: .abbreviated, time: .shortened))
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text((record.condition ?? "Unknown").capitalized)
+                                    .font(.headline)
+                                
+                                Text(String(format: "%.1f ℃", record.temperature - 273.15))
+                                    .font(.subheadline)
+                                
+                                if let date = record.timestamp {
+                                    Text(date.formatted(date: .abbreviated, time: .shortened))
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                }
                             }
                         }
                         .padding(.vertical, 4)
