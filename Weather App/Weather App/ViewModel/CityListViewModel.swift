@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Combine
+import CoreData
 
 @MainActor
 final class CityListViewModel: ObservableObject {
@@ -55,6 +56,7 @@ final class CityListViewModel: ObservableObject {
                 case .success(let weather):
                     self.cityNames.append(trimmed)
                     self.cityWeathers.append(weather)
+                    self.saveWeatherHistory(for: weather)
                 case .failure:
                     self.errorMessage = "Couldn't find weather data for '\(trimmed)'. Please check the spelling."
                 }
@@ -81,6 +83,21 @@ final class CityListViewModel: ObservableObject {
                     continuation.resume()
                 }
             }
+        }
+    }
+    
+    // persist weather history
+    private func saveWeatherHistory(for weather: CityCurrentWeather) {
+        let context = PersistenceController.shared.container.viewContext
+        let record = WeatherInfo(context: context)
+        record.cityName = weather.name ?? "Unknown"
+        record.temperature = weather.main?.temp ?? 0
+        record.condition = weather.weather?.first?.description ?? "Unknown"
+        record.timestamp = Date()
+        do {
+            try context.save()
+        } catch {
+            print("Failed to save history: \(error)")
         }
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct CityListView: View {
     @StateObject private var viewModel = CityListViewModel(service: WeatherService())
@@ -56,6 +57,11 @@ struct CityListView: View {
             // details sheet
             .sheet(item: $selectedCityForDetail) { city in
                 WeatherDetailView(cityWeather: city)
+            }
+            // show city history sheet
+            .sheet(item: $selectedCityForHistory) { city in
+                CityHistoryView(cityName: city.name ?? "Unknown")
+                    .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
             }
             // loading the data
             .onAppear {
